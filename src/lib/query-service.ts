@@ -28,6 +28,8 @@ class QueryService {
 
   // pasar a record
   write(data: any): Promise<any> {
+    console.log('en odoo rest');
+    console.log(data)
     const request_query = `/api/${data.model}/`;
     return restClient.put(request_query, {
       params: {

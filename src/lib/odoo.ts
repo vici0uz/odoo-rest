@@ -10,15 +10,22 @@ export const odooApi = (): any => {
     return results
   }
 
-  async function read(data: any) {
-    const results = await QueryService.query(data);
+  async function read(model: string, data: any) {
+    const oQuery: OdooObject = {
+      model: model,
+      id: data.id
+    }
+    const results = await QueryService.query(oQuery);
     return results.data;
   }
 
   async function write(model: string, data: any) {
+    console.log('en odoo ts')
+    console.log(data)
     const oQuery: OdooObject = {
       model: model,
       values: data,
+      id: data.id,
     }
     const results = await QueryService.write(oQuery);
     return results.data;
@@ -26,7 +33,6 @@ export const odooApi = (): any => {
 
 
   async function create(model: string, data: any) {
-    console.log(data.data)
     const oQuery: OdooObject = {
       model: model,
       values: data.data
@@ -36,8 +42,12 @@ export const odooApi = (): any => {
     return results.data;
   }
 
-  async function unlink(record: any) {
-    const results = await QueryService.delete(record);
+  async function unlink(model: string, data: any) {
+    const oQuery: OdooObject = {
+      model: model,
+      id: data.id
+    }
+    const results = await QueryService.delete(oQuery);
     return results.data;
   }
 
@@ -65,6 +75,7 @@ export const odooApi = (): any => {
     login,
     exec,
     create,
-    unlink
+    unlink,
+    delete: unlink
   }
 }
