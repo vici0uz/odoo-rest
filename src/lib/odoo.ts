@@ -19,13 +19,13 @@ export const odooApi = (): any => {
     return results.data;
   }
 
-  async function write(model: string, data: any) {
+  async function write(model: string, recordId: number, data: any) {
     console.log('en odoo ts')
     console.log(data)
     const oQuery: OdooObject = {
       model: model,
       values: data,
-      id: data.id,
+      id: recordId,
     }
     const results = await QueryService.write(oQuery);
     return results.data;
