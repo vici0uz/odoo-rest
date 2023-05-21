@@ -1,7 +1,7 @@
 import { OdooObject } from './interfaces';
 // import { OdooObject } from './odoo';
 import LoginService from "./login-service"
-import QueryService from "./query-service";
+import { o_call_function, o_create, o_delete, o_query, o_query_filter, o_write } from "./query-service";
 
 export const odooApi = (): any => {
 
@@ -15,7 +15,7 @@ export const odooApi = (): any => {
       model: model,
       id: data.id
     }
-    const results = await QueryService.query(oQuery);
+    const results = await o_query(oQuery);
     return results.data;
   }
 
@@ -27,8 +27,18 @@ export const odooApi = (): any => {
       values: data,
       id: recordId,
     }
-    const results = await QueryService.write(oQuery);
-    return results.data;
+    // const results = await o_write(oQuery);
+    // return results.data;
+    return new Promise((resolve, reject) => {
+      o_write(oQuery).then((results) => {
+        if (results.data.result == true) {
+          resolve(results.data);
+        }
+        else {
+          reject(results)
+        }
+      })
+    })
   }
 
 
@@ -38,7 +48,7 @@ export const odooApi = (): any => {
       values: data.data
     }
     console.log(oQuery)
-    const results = await QueryService.create(oQuery);
+    const results = await o_create(oQuery);
     return results.data;
   }
 
@@ -47,12 +57,12 @@ export const odooApi = (): any => {
       model: model,
       id: data.id
     }
-    const results = await QueryService.delete(oQuery);
+    const results = await o_delete(oQuery);
     return results.data;
   }
 
   async function exec(record: any, method: string) {
-    const results = await QueryService.call_function(record, method, 'x')
+    const results = await o_call_function(record, method, 'x')
     return results
   }
 
@@ -63,7 +73,7 @@ export const odooApi = (): any => {
       limit: data.limit,
       fields: data.fields
     }
-    const results = await QueryService.query_filter(oQuery);
+    const results = await o_query_filter(oQuery);
     return new Promise(resolve => {
       resolve(results.data.result)
     })
