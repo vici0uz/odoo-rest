@@ -20,8 +20,6 @@ export const odooApi = (): any => {
   }
 
   async function write(model: string, recordId: number, data: any) {
-    console.log('en odoo ts')
-    console.log(data)
     const oQuery: OdooObject = {
       model: model,
       values: data,
@@ -71,7 +69,8 @@ export const odooApi = (): any => {
       model: model,
       filter: data.filter,
       limit: data.limit,
-      fields: data.fields
+      fields: data.fields,
+      order: data.order,
     }
     const results = await o_query_filter(oQuery);
     return new Promise(resolve => {

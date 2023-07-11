@@ -29,7 +29,8 @@ function o_create(data: any): Promise<any> {
   return new Promise<any>((resolve, reject) => {
     const request_query = `/api/${data.model}/`;
     restClient.post(request_query, { params: { data: data.values } }).then((response) => {
-      if (response.data && response.data.result == true) {
+      if (response.data && (response.data.result == true || response.data.result)) {
+
         resolve(response)
       } else {
         reject(response);
@@ -55,19 +56,28 @@ function o_delete(data: any): Promise<any> {
 }
 
 function o_query_filter(data: OdooObject): Promise<any> {
-  let request_query = `/api/${data.model}`;
+  const request_query = `/api/${data.model}`;
   if (data.fields) {
     request_query + data.fields;
   }
   return new Promise<any>((resolve, reject) => {
-
-    restClient.get(request_query, {
-      params: {
+    let params;
+    if (data.order) {
+      params = {
         query: data.fields,
         filter: data.filter,
         limit: data.limit,
-      },
-    }).then((response) => {
+        order: `"${data.order}"`,
+      }
+    } else {
+      params = {
+        query: data.fields,
+        filter: data.filter,
+        limit: data.limit,
+      }
+    }
+    restClient.get(request_query, { params }
+    ).then((response) => {
       if (response.status && response.status == 200) {
         resolve(response)
       }
@@ -129,6 +139,4 @@ export {
   o_query,
   o_query_filter,
   o_call_function
-
 }
-/* export default new QueryService();*/
