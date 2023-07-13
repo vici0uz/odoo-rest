@@ -4,7 +4,11 @@ export interface OdooObject {
   ids?: Number[],
   dirty?: Boolean,
   values?: object,
-  fields?: string,
-  filter?: string,
-  limit?: Number
+  fields?: String,
+  filter?: String,
+  limit?: Number,
+  order?: String,
+  method?: String,
+  args?: Object,
+  kwargs?: Object
 }

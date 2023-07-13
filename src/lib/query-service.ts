@@ -25,7 +25,6 @@ function o_write(data: any): Promise<any> {
 }
 // funciona ok
 function o_create(data: any): Promise<any> {
-  console.log(data)
   return new Promise<any>((resolve, reject) => {
     const request_query = `/api/${data.model}/`;
     restClient.post(request_query, { params: { data: data.values } }).then((response) => {
@@ -104,14 +103,14 @@ function o_query(data: any): Promise<any> {
 }
 
 
-function o_call_function(data: any, method: string, type: string): Promise<any> {
+function o_call_function(data: any, type: string): Promise<any> {
   let request_query = String('');
   switch (type) {
     case 'record':
-      request_query = `/object/${data.model}/${data.id}/${method}`;
+      request_query = `/object/${data.model}/${data.id}/${data.method}`;
       break;
     case 'model':
-      request_query = `/object/${data.model}/${method}`;
+      request_query = `/object/${data.model}/${data.method}`;
       break;
   }
   const json_params = {
@@ -123,10 +122,10 @@ function o_call_function(data: any, method: string, type: string): Promise<any> 
   return new Promise((resolve, reject) => {
 
     restClient.post(request_query, JSON.stringify(json_params)).then((response) => {
-      if (response.data && response.data.result == true) {
+      if (response.data && response.statusText == "OK") {
         resolve(response);
       } else {
-        reject('function_execuction_error');
+        reject('function_execution_error');
       };
     })
   });

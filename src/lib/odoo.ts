@@ -59,8 +59,24 @@ export const odooApi = (): any => {
     return results.data;
   }
 
-  async function exec(record: any, method: string) {
-    const results = await o_call_function(record, method, 'x')
+  async function exec_record(model: any, recordId: number, method: string, args: any) {
+    const oQuery: OdooObject = {
+      model: model,
+      id: recordId,
+      method: method,
+      kwargs: args
+    }
+    const results = await o_call_function(oQuery, 'record')
+    return results
+  }
+
+  async function exec_model(model: any, method: string, args: any) {
+    const oQuery: OdooObject = {
+      model: model,
+      method: method,
+      kwargs: args
+    }
+    const results = await o_call_function(oQuery, 'model')
     return results
   }
 
@@ -82,7 +98,8 @@ export const odooApi = (): any => {
     read,
     search,
     login,
-    exec,
+    exec_record,
+    exec_model,
     create,
     unlink,
     delete: unlink
