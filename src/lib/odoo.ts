@@ -45,7 +45,6 @@ export const odooApi = (): any => {
       model: model,
       values: data.data
     }
-    console.log(oQuery)
     const results = await o_create(oQuery);
     return results.data;
   }
