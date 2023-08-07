@@ -69,11 +69,12 @@ export const odooApi = (): any => {
     return results
   }
 
-  async function exec_model(model: any, method: string, args: any) {
+  async function exec_model(model: any, method: string, kwargs: any, args?: any) {
     const oQuery: OdooObject = {
       model: model,
       method: method,
-      kwargs: args
+      kwargs: kwargs? kwargs: {},
+      args: args? args:[]
     }
     const results = await o_call_function(oQuery, 'model')
     return results

@@ -115,7 +115,7 @@ function o_call_function(data: any, type: string): Promise<any> {
   }
   const json_params = {
     params: {
-      args: [],
+      args: data.args,
       kwargs: data.kwargs,
     },
   };
